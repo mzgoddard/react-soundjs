@@ -8,7 +8,11 @@ export class SoundRegister extends Component {
 
   componentWillUnmount() {
     let sounds = this.props.sound || this.props.sounds;
-    this.context.soundjsContext.unregister(sounds);
+    let soundjsContext = this.context.soundjsContext;
+    let delay = this.props.unregisterDelay || 5000;
+    setTimeout(() => {
+      soundjsContext.unregister(sounds);
+    }, delay);
   }
 
   render() {

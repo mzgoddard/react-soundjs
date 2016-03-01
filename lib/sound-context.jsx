@@ -4,7 +4,6 @@ export class SoundContext extends Component {
   constructor(...args) {
     super(...args);
     this.soundRefCounts = {};
-    this.unregisterDelay = this.props.unregisterDelay || 5000;
   }
 
   getChildContext() {
@@ -41,15 +40,13 @@ export class SoundContext extends Component {
   }
 
   unregister(sounds) {
-    setTimeout(() => {
-      this._eachSound(sounds, sound => {
-        let id = this._getRefId(sound);
-        this.soundRefCounts[id]--;
-        if (!this.soundRefCounts[id]) {
-          this.props.soundjs.removeSound(sound);
-        }
-      });
-    }, this.unregisterDelay);
+    this._eachSound(sounds, sound => {
+      let id = this._getRefId(sound);
+      this.soundRefCounts[id]--;
+      if (!this.soundRefCounts[id]) {
+        this.props.soundjs.removeSound(sound);
+      }
+    });
   }
 
   render() {
@@ -57,7 +54,6 @@ export class SoundContext extends Component {
   }
 }
 
-console.log(React.PropTypes)
 SoundContext.propTypes = {
   soundjs: React.PropTypes.func.isRequired,
 };
