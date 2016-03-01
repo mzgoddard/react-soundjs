@@ -1,11 +1,20 @@
 import React, {Component} from 'react';
 
-const events = [
-  'onClick',
-];
+const events = {
+  mount: 'onMount',
+  unmount: 'onUnmount',
+  click: 'onClick',
+};
 
 export class Sound extends Component {
-  _play(data, event) {
+  constructor(...args) {
+    super(...args);
+
+    this._play = this._play.bind(this);
+  }
+
+  _play(event) {
+    let data = this.props[events[event.type]];
     if (data) {
       if (typeof data === 'string' || typeof data === 'object') {
         this.context.soundjs.play(data);
@@ -18,19 +27,18 @@ export class Sound extends Component {
 
   _handlers() {
     let options = {};
-    for (let eventName of events) {
-      if (this.props[eventName]) {
-        options[eventName] = this._play.bind(this, this.props[eventName]);
-      }
+    for (let handlerName in this.props) {
+      options[handlerName] = this._play;
     }
+    return options;
   }
 
   componentDidMount() {
-    this._play(this.props.onMount);
+    this._play({type: 'mount'});
   }
 
   componentWillUnmount() {
-    this._play(this.props.onUnmount);
+    this._play({type: 'unmount'});
   }
 
   render() {
