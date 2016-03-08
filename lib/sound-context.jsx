@@ -14,6 +14,9 @@ export class SoundContext extends Component {
   }
 
   _getRefId(sound) {
+    if (typeof sound === 'string') {
+      return sound;
+    }
     if (sound.id) {
       return sound.id;
     }
