@@ -37,6 +37,7 @@ export class SoundContext extends Component {
       let id = this._getRefId(sound);
       if (!this.soundRefCounts[id]) {
         this.props.soundjs.registerSound(sound);
+        this.soundRefCounts[id] = 0;
       }
       this.soundRefCounts[id]++;
     });
